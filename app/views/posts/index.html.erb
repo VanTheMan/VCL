@@ -2,9 +2,13 @@
 
 <%= render 'form' %>
 
-<table>
+<table class="table table-hover">
   <tr>
     <th>Content</th>
+    <th>Comments</th>
+    <th>User email</th>
+    <th></th>
+    <th></th>
     <th></th>
     <th></th>
     <th></th>
@@ -13,11 +17,30 @@
 <% @posts.each do |post| %>
   <tr>
     <td><%= post.content %></td>
+    <td><%= post.comments.count %></td>
+    <td><%= post.user.email %></td>
     <td><%= link_to 'Show', post %></td>
+    <td><%= link_to "VCL", vote_up_post_path(post) %>(<%= post.voteup_ids.count %>)</td>
+    <td><%= link_to "Chem gio", vote_down_post_path(post) %>(<%= post.votedown_ids.count %>)</td>
+  <% if post.user == current_user %>
     <td><%= link_to 'Edit', edit_post_path(post) %></td>
     <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  <% end %>
   </tr>
 <% end %>
-</table>
+</table> 
 
-<br />
+<!-- <div class="row">
+  <aside class="span4">
+    <section>
+      <h2><%= current_user.email %></h2>
+    </section>
+  </aside>
+  <div class="span8">
+    <h3>Posts (<%= @posts.count %>) </h3>
+    <ol class="posts">
+      <%= render @posts %>
+    </ol>
+  </div>
+</div> -->
+

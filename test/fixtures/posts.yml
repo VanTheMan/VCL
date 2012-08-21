@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  content: MyText
+  vuicuoilen_count: 1
+  chemgio_count: 1
+  valid: false
+
+two:
+  content: MyText
+  vuicuoilen_count: 1
+  chemgio_count: 1
+  valid: false

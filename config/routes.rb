@@ -1,4 +1,16 @@
 VCL::Application.routes.draw do
+  root :to => "posts#index"
+
+  devise_for :users
+
+  resources :posts do
+    resources :comments
+    member do 
+      get :vote_up
+      get :vote_down
+    end
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

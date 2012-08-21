@@ -1,10 +1,25 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <b>Content:</b>
   <%= @post.content %>
 </p>
+<p>
+	<%= link_to "VCL", vote_up_post_path(@post) %>(<%= @post.voteup_ids.count %>)
+	<%= link_to "Chem gio", vote_down_post_path(@post) %>(<%= @post.votedown_ids.count %>)
+</p
 
+<table class="table table-striped">
+	<tr>
+		<th>Comments: </th>
+		<th>User email</th>
+	</tr>
+<% @comments.each do |comment| %>
+	<tr>
+		<td><%= comment.content %></td>
+		<td><%= comment.user.email%></td>
+	</tr>
+<% end %>
+</table>
 
 <%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %>
+<%= link_to 'Back', posts_path %> |
+<%= link_to 'Comment', new_post_comment_path(@post) %>
