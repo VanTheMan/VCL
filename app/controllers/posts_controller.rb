@@ -2,7 +2,15 @@ class PostsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
 
   def index
-    @posts = Post.all.desc(:updated_at)
+    @posts = Post.all.desc(:created_at)
+    if params[:order_by] == "updated_at"
+      @posts = Post.all.desc(:updated_at)
+    elsif params[:order_by] == "created_at"
+      @posts = Post.all.desc(:created_at)
+    elsif params[:order_by] == "comments_num"
+      @posts = Post.all.sort{|a,b| b.comments.count <=> a.comments.count }
+      # @posts = Post.all(:include => :comments)
+    end
   	@post = Post.new
   end
 

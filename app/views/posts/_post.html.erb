@@ -1,6 +1,16 @@
 <li>
+  <strong><%= post.user.email %></strong>
   <span class="content"><%= post.content %></span>
+  <span>
+    <%= link_to 'Comment', post %>(<%= post.comments.count %>)
+  	<%= link_to "VCL", vote_up_post_path(post) %>(<%= post.voteup_ids.count %>)
+  	<%= link_to "Chem gio", vote_down_post_path(post) %>(<%= post.votedown_ids.count %>)
+    <% if post.user == current_user %>
+      <td><%= link_to 'Edit', edit_post_path(post) %></td>
+      <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <% end %>
+  </span> </br>
   <span class="timestamp">
-    Posted <%= time_ago_in_words(post.updated_at) %> ago.
+    Posted <%= time_ago_in_words(post.created_at) %> ago.
   </span>
 </li>

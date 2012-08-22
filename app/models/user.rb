@@ -42,6 +42,6 @@ class User
   # field :authentication_token, :type => String
 
   #relation with posts and comments
-  has_many :posts
-  has_many :comments
+  has_many :posts, dependent: :destroy
+  has_many :comments, dependent: :destroy
 end

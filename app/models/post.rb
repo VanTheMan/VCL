@@ -5,13 +5,13 @@ class Post
   field :content, :type => String
   # field :vuicuoilen_count, :type => Integer, default => 0
   # field :chemgio_count, :type => Integer, default => 0
-  field :valid, :type => Boolean
+  field :valid, :type => Integer
 
   field :voteup_ids, type: Array, default: []
   field :votedown_ids, type: Array, default: []
   
   #relation with user and comments
   belongs_to :user
-  has_many :comments
+  has_many :comments, dependent: :destroy
 
 end

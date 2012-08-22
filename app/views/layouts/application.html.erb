@@ -9,13 +9,12 @@
 <body>
 	<%= render 'layouts/header' %>
 	<div class="container">
-		<%= yield %>
 		<% if notice %>
 			<p class="alert alert-success"><%= notice %></p>
-		<% end %>
-		<% if alert %>
+		<% elsif alert %>
 			<p class="alert alert-error"><%= alert %></p>
 		<% end %>
+		<%= yield %>
 		<%= render 'layouts/footer' %>
 	</div>
 </body>
