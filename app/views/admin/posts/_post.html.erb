@@ -1,0 +1,27 @@
+<li>
+  <strong><%= post.user.email %></strong>
+  <% if user_signed_in? && !post.reported_ids.include?(current_user.id) %>
+    <strong class="report">
+      <%= link_to "Report", report_post_path(post) %> (<%= post.reports_count%>)
+    </strong>
+  <% else %>
+      <strong class="report">
+        Report (<%= post.reports_count%>)
+      </strong>
+  <% end %>
+  <span class="content"><%= post.content %></span>
+  <span>
+<!--     <%= link_to 'Comment', post %>(<%= post.comments.count %>)
+  	<%= link_to "VCL", vote_up_post_path(post) %>(<%= post.voteup_ids.count %>)
+  	<%= link_to "Chem gio", vote_down_post_path(post) %>(<%= post.votedown_ids.count %>) 
+    <%= link_to 'Edit', edit_post_path(post) %> -->
+    <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
+  </span> 
+  <span>
+    <%= link_to 'Disable', disable_admin_post_path(post) %>
+  </span>
+  </br>
+  <span class="timestamp">
+    Posted <%= time_ago_in_words(post.created_at) %> ago.
+  </span>
+</li>

@@ -13,3 +13,23 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+//= require_self
+
+$(document).ready(function(){
+	$(".vote-up").click(function(){
+		var url = $(this).attr('href') + ".json";
+		var vote_up_count = $(this).siblings('span.vote-up-count');
+		console.log(vote_up_count);
+		$.ajax({
+		  url: url,
+		  success: function(response){
+		  	if (response.success) {
+		  		vote_up_count.text(response.vote_up_count);
+		  	} else {
+		  		alert('false');
+		  	}
+		  }
+		});
+		return false;
+	});
+});

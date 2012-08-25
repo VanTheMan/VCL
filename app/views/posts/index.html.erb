@@ -1,5 +1,8 @@
 <div class="row">
   <aside class="span4">
+    <% if current_user %>
+      <h3><%= current_user.email %></h3><br/>
+    <% end %>
     <%= render 'form' %>
   </aside>
   <div class="span8">
@@ -9,6 +12,10 @@
       <%= link_to "Most Recent", posts_path(:order_by => "updated_at") %>
       <%= link_to "Newest", posts_path(:order_by => "created_at") %>
       <%= link_to "Hot", posts_path(:order_by => "comments_num") %>
+      <%= link_to "Random", posts_path(:order_by => "random") %>
+      <% if current_user %>
+       <%= link_to "Favourite", posts_path(:order_by => "favourite")%>
+      <% end %>
     </h3> 
      <ol class="posts">
       <%= render @posts %>

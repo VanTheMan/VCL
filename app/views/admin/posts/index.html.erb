@@ -1,0 +1,18 @@
+<div class="row">
+  <aside class="span4">
+    <%= render 'form' %>
+  </aside>
+  <div class="span8">
+    <h3> 
+      Listing Posts (<%= @posts.count %>) 
+      Order by
+      <%= link_to "Most Recent", admin_posts_path(:order_by => "updated_at") %>
+      <%= link_to "Newest", admin_posts_path(:order_by => "created_at") %>
+      <%= link_to "Hot", admin_posts_path(:order_by => "comments_num") %>
+      <%= link_to "Report", admin_posts_path(:order_by => "reports_count") %>
+    </h3> 
+     <ol class="posts">
+      <%= render @posts %>
+    </ol>
+  </div>
+</div>

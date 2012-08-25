@@ -1,15 +1,36 @@
 <li>
   <strong><%= post.user.email %></strong>
+  <% if user_signed_in? %>
+    <strong class="report">
+      <%= link_to "Report", report_post_path(post) %> (<%= post.reports_count%>)
+      <% if !current_user.favourite_posts_ids.include?(post.id) %>
+        <%= link_to "Favourite", favourite_post_path(post) %>
+      <% else %>
+        <%= link_to "Remove Favourite", favourite_post_path(post) %>
+      <% end %>
+    </strong>
+  <% else %>
+      <strong class="report">
+        Report (<%= post.reports_count%>)
+      </strong>
+  <% end %>
   <span class="content"><%= post.content %></span>
   <span>
     <%= link_to 'Comment', post %>(<%= post.comments.count %>)
-  	<%= link_to "VCL", vote_up_post_path(post) %>(<%= post.voteup_ids.count %>)
-  	<%= link_to "Chem gio", vote_down_post_path(post) %>(<%= post.votedown_ids.count %>)
-    <% if post.user == current_user %>
-      <td><%= link_to 'Edit', edit_post_path(post) %></td>
-      <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <% if user_signed_in? && !post.voteup_ids.include?(current_user.id) && 
+                                    !post.votedown_ids.include?(current_user.id)%>
+  	 <%= link_to "VCL", vote_up_post_path(post), class: "vote-up" %>(<span class="vote-up-count"><%= post.voteup_ids.count %></span>)
+  	 <%= link_to "Chem gio", vote_down_post_path(post) %>(<%= post.votedown_ids.count %>)
+    <% else %>
+      VCL(<%= post.voteup_ids.count %>)
+      Chem gio(<%= post.voteup_ids.count %>)
     <% end %>
-  </span> </br>
+    <% if post.user == current_user %>
+      <%= link_to 'Edit', edit_post_path(post) %>
+      <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+  </span>
+  </br>
   <span class="timestamp">
     Posted <%= time_ago_in_words(post.created_at) %> ago.
   </span>

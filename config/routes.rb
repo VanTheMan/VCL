@@ -8,9 +8,18 @@ VCL::Application.routes.draw do
     member do 
       get :vote_up
       get :vote_down
+      get :report
+      get :favourite
     end
   end
 
+  namespace :admin do
+    resources :posts do
+      member do
+        get :disable
+      end
+    end
+  end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
