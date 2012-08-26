@@ -41,13 +41,17 @@ class PostsController < ApplicationController
 
   def vote_down
     @post = Post.find(params[:id])
-    if !@post.votedown_ids.include?(current_user.id)
-      if !@post.voteup_ids.include?(current_user.id)
-        @post.votedown_ids << current_user.id
-        @post.save
-        redirect_to posts_path
-      else
-        redirect_to posts_path, notice: 'you cannot vote down' 
+    if @post.votedown_ids.include?(current_user.id)  || @post.voteup_ids.include?(current_user.id)
+      respond_to do |format|  
+        format.html { redirect_to posts_path }
+        format.html { render json: { success: false } }
+      end
+    else
+      @post.votedown_ids << current_user.id
+      @post.save
+      respond_to do |format|
+        format.html { redirect_to posts_path }
+        format.json { render json: { success: true, vote_down_count: @post.votedown_ids.count } }
       end
     end
   end
@@ -55,6 +59,7 @@ class PostsController < ApplicationController
   def show
     @post = Post.find(params[:id])   
     @comments = @post.comments
+    @comment = Comment.new
   end
 
   def create
@@ -94,9 +99,16 @@ class PostsController < ApplicationController
       @post.reported_ids << current_user.id
       @post.reports_count += 1
       @post.save
-      redirect_to posts_path
+
+      respond_to do |format|
+        format.html { redirect_to posts_path } 
+        format.json { render json: {success: true, reports_count: @post.reports_count }}
+      end
     else
-      redirect_to posts_path
+      respond_to do |format|
+        format.html { redirect_to posts_path }
+        format.json { render json: {success: false }}
+      end
     end
   end
 
@@ -105,11 +117,17 @@ class PostsController < ApplicationController
     if !current_user.favourite_posts_ids.include?(@post.id)
       current_user.favourite_posts_ids << @post.id
       current_user.save
-      redirect_to posts_path
+      respond_to do |format|
+        format.html { redirect_to posts_path }
+        format.json { render json: {success: true } }
+      end
     else
       current_user.favourite_posts_ids = current_user.favourite_posts_ids - [@post.id]
       current_user.save
-      redirect_to posts_path
+      respond_to do |format|
+        format.html { redirect_to posts_path }
+        format.json { render json: {success: false } }
+      end
     end
   end
 

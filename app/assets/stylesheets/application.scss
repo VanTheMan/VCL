@@ -106,7 +106,7 @@ form textarea{
 
 /* posts */
 
-.posts {
+.posts, .comments {
   list-style: none;
   margin: 10px 0 0 0;
 
@@ -134,4 +134,10 @@ aside {
 
 .report{
   float: right;
+}
+
+.vote a.vote-link.disable, .report a.report-link.disable {
+  text-decoration: none;
+  color: black;
+  cursor: default;
 }

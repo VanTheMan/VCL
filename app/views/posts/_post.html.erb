@@ -2,29 +2,35 @@
   <strong><%= post.user.email %></strong>
   <% if user_signed_in? %>
     <strong class="report">
-      <%= link_to "Report", report_post_path(post) %> (<%= post.reports_count%>)
-      <% if !current_user.favourite_posts_ids.include?(post.id) %>
-        <%= link_to "Favourite", favourite_post_path(post) %>
-      <% else %>
-        <%= link_to "Remove Favourite", favourite_post_path(post) %>
-      <% end %>
-    </strong>
-  <% else %>
-      <strong class="report">
+    <% if !post.reported_ids.include?(current_user.id)%> 
+      <%= link_to "Report", report_post_path(post), class: "report-link" %> (<span class="report-count"><%= post.reports_count%></span>)
+    <% else %>
         Report (<%= post.reports_count%>)
-      </strong>
+    <% end %>
+    <span class="favourite">
+      <% if !current_user.favourite_posts_ids.include?(post.id) %>
+        <%= link_to "Favourite", favourite_post_path(post), class: "favourite-link" %>
+      <% else %>
+        <%= link_to "Remove Favourite", favourite_post_path(post), class: "favourite-link" %>
+      <% end %>
+    </span>
   <% end %>
+  </strong>
   <span class="content"><%= post.content %></span>
-  <span>
+  <span class="comment">
     <%= link_to 'Comment', post %>(<%= post.comments.count %>)
+  </span>
+  <span class="vote">
     <% if user_signed_in? && !post.voteup_ids.include?(current_user.id) && 
                                     !post.votedown_ids.include?(current_user.id)%>
-  	 <%= link_to "VCL", vote_up_post_path(post), class: "vote-up" %>(<span class="vote-up-count"><%= post.voteup_ids.count %></span>)
-  	 <%= link_to "Chem gio", vote_down_post_path(post) %>(<%= post.votedown_ids.count %>)
+  	 <%= link_to "VCL", vote_up_post_path(post), class: "vote-up vote-link" %>(<span class="vote-up-count"><%= post.voteup_ids.count %></span>)
+  	 <%= link_to "Chem gio", vote_down_post_path(post), class: "vote-down vote-link" %>(<span class="vote-down-count"><%= post.votedown_ids.count %></span>)
     <% else %>
       VCL(<%= post.voteup_ids.count %>)
-      Chem gio(<%= post.voteup_ids.count %>)
+      Chem gio(<%= post.votedown_ids.count %>)
     <% end %>
+  </span>
+  <span class="modify">
     <% if post.user == current_user %>
       <%= link_to 'Edit', edit_post_path(post) %>
       <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
