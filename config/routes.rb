@@ -3,6 +3,8 @@ VCL::Application.routes.draw do
 
   devise_for :users
 
+  resources :users
+
   resources :posts do
     resources :comments
     member do 
@@ -14,6 +16,7 @@ VCL::Application.routes.draw do
   end
 
   namespace :admin do
+    resources :users
     resources :posts do
       member do
         get :disable

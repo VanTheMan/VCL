@@ -1,6 +1,8 @@
 class CommentsController < ApplicationController
+	before_filter :authenticate_user!
+	 
 	def new
-		@post = Post.find(params[:post_id])
+		@post = Post.find(params[:post_id]).page(params[:page]).per(10)
 		@comment = Comment.new
 	end
 
@@ -9,7 +11,6 @@ class CommentsController < ApplicationController
 		@comment.post = Post.find(params[:post_id])
 
 		html = render_to_string :partial => "comment", :layout => false, :locals => { comment: @comment }
-		#binding.pry
 
 		if @comment.save 
 			respond_to do |format|
@@ -20,11 +21,6 @@ class CommentsController < ApplicationController
 			render action: "new"
 		end
 	end
-
-	# def comment
-	# 	@comment = current_user.comments.build(params[:comment])
-	# 	@comment.post = Post.find(params[:post_id])
-	# end
 
 	def destroy
 		@comment = Comment.find(params[:id])

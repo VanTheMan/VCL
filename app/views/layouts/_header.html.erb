@@ -7,9 +7,29 @@
           <li><%= link_to "Home", root_path %></li>
           <% if current_user %>
             <% if current_user.is_a? Admin %>
-              <li><%= link_to "Aministrator",admin_posts_path %></li>
+              <li id="fat-menu" class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Administrator <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Manage Posts", admin_posts_path %></li>
+                  <li><%= link_to "Manage Users", admin_users_path %></li>
+                  </li>
+                </ul>
+              </li>
+              <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
+            <% else %>
+              <li id="fat-menu" class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  User <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Edit profile", edit_user_path(current_user) %></li>
+                  <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
+                  </li>
+                </ul>
+              </li>  
             <% end %>
-            <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
           <% else %>
             <li><%= link_to "Sign in", new_user_session_path %></li>
           <% end %>

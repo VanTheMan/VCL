@@ -1,8 +1,13 @@
 <div class="row">
   <aside class="span4">
-    <% if current_user %>
-      <h3><%= current_user.email %></h3><br/>
-    <% end %>
+    <section>
+      <h1>
+        <% if current_user %>
+          <%= current_user.email %>
+          <%= gravatar_for current_user %>
+        <% end %>
+      </h1>
+    </section>
     <%= render 'form' %>
   </aside>
   <div class="span8">
@@ -20,5 +25,7 @@
      <ol class="posts">
       <%= render @posts %>
     </ol>
+    <%= paginate @posts, :window => 2 %>
   </div>
+
 </div>

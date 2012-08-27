@@ -8,10 +8,14 @@
 </p>
 
 <%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %> |
-<%= link_to 'Comment', new_post_comment_path(@post) %>
+<%= link_to 'Back', posts_path %> 
+
 
 <ol class="comments">
+	<% if @comments.count > 2 %>
+		<%= link_to 'View all ' + @comments.count.to_s + ' comments', post_path(@post, :show => "all"), 
+			class: "view-all-comments"  %>
+	<% end %>
 	<%= render @comments %>
 </ol>	
 

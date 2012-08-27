@@ -60,8 +60,6 @@ $(document).ready(function(){
 		return false;
 	});
 
-	// $("dsd").prepend(response.html)
-
 	$(".report-link").click(function(){
 		var url = $(this).attr('href') + ".json";
 		var report_count = $(this).siblings('span.report-count');
@@ -111,6 +109,27 @@ $(document).ready(function(){
 					$(".comments").append(response.html);
 				} else {
 					alert('false');
+				}
+			}
+		});
+		return false;
+	});
+
+	$(".view-all-comments").click(function(){
+		var url = $(this).attr('href');
+		var link = $(this);
+		var comments = $(this).parent('.comments');
+		console.log("success");
+		$.ajax({
+			data: { show: "all" },
+			url: url,
+			dataType: 'json',
+			success: function(response){
+				if (response.success){
+					// comments.prepend(response.html);
+					link.hide();
+					comments.html(response.html);
+					// alert("success");
 				}
 			}
 		});

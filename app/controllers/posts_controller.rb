@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
 
   def index
-    @posts = Post.valid.all.desc(:created_at)
+    @posts = Post.valid.all.desc(:created_at).page(params[:page]).per(7)
     if params[:order_by] == "updated_at"
       @posts = Post.valid.all.desc(:updated_at)
     elsif params[:order_by] == "created_at"
@@ -60,6 +60,17 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])   
     @comments = @post.comments
     @comment = Comment.new
+    if @comments.count > 2
+      @comments = @post.comments.skip(@comments.count - 2)
+      if params[:show] == "all"        
+        @comments = @post.comments
+        html = render_to_string :partial => "comments/list", :locals => {comments: @comments}
+        respond_to do |format|
+          format.html
+          format.json { render json: {success: true, html: html } }
+        end
+      end
+    end
   end
 
   def create

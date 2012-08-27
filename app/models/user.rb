@@ -46,5 +46,6 @@ class User
   has_many :comments, dependent: :destroy
 
   field :favourite_posts_ids, type: Array, default: []
-
+  field :name, type: String
+  
 end

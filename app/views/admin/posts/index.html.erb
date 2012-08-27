@@ -1,5 +1,13 @@
 <div class="row">
   <aside class="span4">
+    <section>
+      <h1>
+        <% if current_user %>
+          <%= current_user.email %>
+          <%= gravatar_for current_user %>
+        <% end %>
+      </h1>
+    </section>
     <%= render 'form' %>
   </aside>
   <div class="span8">
