@@ -16,7 +16,7 @@
 //= require_self
 
 $(document).ready(function(){
-	$(".vote-up").click(function(){
+	$(".vote-up").live('click', function(){
 		if ($(this).hasClass("disable")) {
 			return false;
 		}
@@ -37,7 +37,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-	$(".vote-down").click(function(){
+	$(".vote-down").live('click', function(){
 		if ($(this).hasClass("disable")) {
 			return false;
 		}
@@ -60,7 +60,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-	$(".report-link").click(function(){
+	$(".report-link").live('click', function(){
 		var url = $(this).attr('href') + ".json";
 		var report_count = $(this).siblings('span.report-count');
 		var report_link = $(this);
@@ -79,7 +79,7 @@ $(document).ready(function(){
 		return false;
 	});	
 
-	$(".favourite-link").click(function(){
+	$(".favourite-link").live('click', function(){
 		var url = $(this).attr('href') + ".json";
 		var favourite = $(this);
 		$.ajax({
@@ -104,9 +104,9 @@ $(document).ready(function(){
 			type: type,
 			data: f.serialize(),
 			success: function(response){
-				console.log(response);
 				if (response.success){
 					$(".comments").append(response.html);
+					f[0].reset();
 				} else {
 					alert('false');
 				}
@@ -119,17 +119,37 @@ $(document).ready(function(){
 		var url = $(this).attr('href');
 		var link = $(this);
 		var comments = $(this).parent('.comments');
-		console.log("success");
 		$.ajax({
 			data: { show: "all" },
 			url: url,
 			dataType: 'json',
 			success: function(response){
 				if (response.success){
-					// comments.prepend(response.html);
 					link.hide();
 					comments.html(response.html);
-					// alert("success");
+				}
+			}
+		});
+		return false;
+	});
+
+	$('#post_form').submit(function(){
+		var url = $(this).attr('action') + '.json';
+		var type = $(this).attr('method');
+		var f = $(this);
+		var text_area = $(this).children(".field").children("textarea");
+		console.log(text_area);
+		$.ajax({
+			url: url,
+			type: type,
+			data: f.serialize(),
+			success: function(response){
+				if (response.success){
+					$(".posts").prepend(response.html);
+					// text_area.text("Post something ....");
+					f[0].reset();
+				} else {
+					alert("false");
 				}
 			}
 		});

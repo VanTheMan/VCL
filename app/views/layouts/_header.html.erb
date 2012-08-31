@@ -4,6 +4,12 @@
       <%= link_to "vui cuoi len", root_path, id: "logo" %>
       <nav>
         <ul class="nav pull-right">
+          <!-- <li>
+            <%= form_tag users_path, method: :get do %>
+              <%= text_field_tag :search, params[:search] %>
+              <%= submit_tag "Search", :name => nil %>
+            <% end %>
+          </li> -->
           <li><%= link_to "Home", root_path %></li>
           <% if current_user %>
             <% if current_user.is_a? Admin %>

@@ -1,6 +1,8 @@
 VCL::Application.routes.draw do
   root :to => "posts#index"
 
+  # match "vote_up_post" => "posts#vote_up"
+
   devise_for :users
 
   resources :users

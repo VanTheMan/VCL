@@ -1,6 +1,7 @@
 class Post
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::FullTextSearch
 
   field :content, type: String
   # field :vuicuoilen_count, :type => Integer, default => 0
@@ -20,4 +21,6 @@ class Post
   #relation with user and comments
   belongs_to :user
   has_many :comments, dependent: :destroy
+
+  fulltext_search_in :content
 end

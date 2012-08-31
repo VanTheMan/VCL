@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include Mongoid::FullTextSearch
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -47,5 +48,7 @@ class User
 
   field :favourite_posts_ids, type: Array, default: []
   field :name, type: String
-  
+
+
+  fulltext_search_in :email, ngram_width: 1
 end

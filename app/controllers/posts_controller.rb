@@ -64,7 +64,7 @@ class PostsController < ApplicationController
       @comments = @post.comments.skip(@comments.count - 2)
       if params[:show] == "all"        
         @comments = @post.comments
-        html = render_to_string :partial => "comments/list", :locals => {comments: @comments}
+        html = render_to_string :partial => "comments/list", :locals => { comments: @comments }
         respond_to do |format|
           format.html
           format.json { render json: {success: true, html: html } }
@@ -75,9 +75,15 @@ class PostsController < ApplicationController
 
   def create
   	@post = current_user.posts.build(params[:post])
-
-  	if @post.save
-	    redirect_to posts_path, notice: 'post was successfully created.' 
+    # binding.pry
+    if @post.save
+      # binding.pry
+      html = render_to_string :partial => "post", :layout => false, :locals => { post: @post }
+      respond_to do |format|
+	      format.html { redirect_to posts_path }
+        format.json { render json: { success: true, html: html } }
+      end
+      # redirect_to posts_path
 	  else
       render action: "new" 
     end   
