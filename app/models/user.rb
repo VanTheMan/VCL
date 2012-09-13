@@ -45,6 +45,8 @@ class User
   #relation with posts and comments
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :favourites, dependent: :destroy
+  # embeds_many :comments, as: :locatable
 
   field :favourite_posts_ids, type: Array, default: []
   field :name, type: String

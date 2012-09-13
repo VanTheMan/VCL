@@ -1,12 +1,6 @@
 class Admin::PostsController < ApplicationController
 	before_filter :authenticated_admin
 
-	def authenticated_admin
-		if !current_user.is_a? Admin
-			redirect_to posts_path
-		end	
-	end
-
 	def index
 	    @posts = Post.all.desc(:created_at)
 	    if params[:order_by] == "updated_at"
@@ -76,4 +70,11 @@ class Admin::PostsController < ApplicationController
 		@post.save
 		redirect_to admin_posts_path
 	end
+
+	private
+		def authenticated_admin
+			if !current_user.is_a? Admin
+				redirect_to posts_path
+			end	
+		end
 end

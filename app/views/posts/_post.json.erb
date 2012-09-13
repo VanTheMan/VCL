@@ -3,7 +3,7 @@
   <% if user_signed_in? %>
     <strong class="report">
     <% if !post.reported_ids.include?(current_user.id)%> 
-      <%= link_to "Report", report_post_path(post.id), class: "report-link" %> (<span class="report-count"><%= post.reports_count%></span>)
+      <%= link_to "Report ("+ post.reports_count.to_s + ")", report_post_path(post.id), class:"report-link" %>
     <% else %>
         Report (<%= post.reports_count%>)
     <% end %>
@@ -23,8 +23,8 @@
   <span class="vote">
     <% if user_signed_in? && !post.voteup_ids.include?(current_user.id) && 
                                     !post.votedown_ids.include?(current_user.id)%>
-     <%= link_to "VCL", vote_up_post_path(post.id), class: "vote-up vote-link" %>(<span class="vote-up-count"><%= post.voteup_ids.count %></span>)
-     <%= link_to "Chem gio", vote_down_post_path(post.id), class: "vote-down vote-link" %>(<span class="vote-down-count"><%= post.votedown_ids.count %></span>)
+      <%= link_to "VCL(" + post.voteup_ids.count.to_s + ")", vote_up_post_path(post.id),class: "vote-up "%>
+      <%= link_to "Chem gio(" + post.votedown_ids.count.to_s + ")", vote_down_post_path(post.id),class: "vote-down "%>
     <% else %>
       VCL(<%= post.voteup_ids.count %>)
       Chem gio(<%= post.votedown_ids.count %>)

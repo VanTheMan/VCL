@@ -21,6 +21,8 @@ class Post
   #relation with user and comments
   belongs_to :user
   has_many :comments, dependent: :destroy
+  has_many :favourites, dependent: :destroy
+  # embeds_many :comments, as: :locatable
 
   fulltext_search_in :content
 end

@@ -2,19 +2,23 @@ class PostsController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
 
   def index
-    @posts = Post.valid.all.desc(:created_at).page(params[:page]).per(7)
-    if params[:order_by] == "updated_at"
-      @posts = Post.valid.all.desc(:updated_at)
-    elsif params[:order_by] == "created_at"
-      @posts = Post.valid.all.desc(:created_at)
-    elsif params[:order_by] == "comments_num"
-      @posts = Post.valid.all.sort{|a,b| b.comments.count <=> a.comments.count }
-    elsif params[:order_by] == "random"
-      @random_num = rand(Post.all.count)
-      @posts = Post.all.sample(@random_num)
-    elsif params[:order_by] == "favourite"
-      @posts = Post.find(current_user.favourite_posts_ids)
+    case params[:order_by]
+      when "updated_at" 
+        @list_posts = Post.valid.all.desc(:updated_at)
+      when "created_at"
+        @list_posts = Post.valid.all.desc(:created_at)  
+      when "comments_num"  
+        @list_posts = Post.valid.all.sort{|a,b| b.comments.count <=> a.comments.count }
+      when "random"
+        @random_num = rand(Post.all.count)
+        @list_posts = Post.all.sample(@random_num)
+      when "favourite"
+        @list_posts = Post.find(current_user.favourite_posts_ids)
+      else
+        @list_posts = Post.valid.all.desc(:created_at)
     end
+
+    @posts = @list_posts.page(params[:page]).per(5)
   	@post = Post.new
   end
 
@@ -75,15 +79,12 @@ class PostsController < ApplicationController
 
   def create
   	@post = current_user.posts.build(params[:post])
-    # binding.pry
     if @post.save
-      # binding.pry
       html = render_to_string :partial => "post", :layout => false, :locals => { post: @post }
       respond_to do |format|
 	      format.html { redirect_to posts_path }
         format.json { render json: { success: true, html: html } }
       end
-      # redirect_to posts_path
 	  else
       render action: "new" 
     end   
@@ -131,19 +132,20 @@ class PostsController < ApplicationController
 
   def favourite
     @post = Post.find(params[:id])
-    if !current_user.favourite_posts_ids.include?(@post.id)
-      current_user.favourite_posts_ids << @post.id
-      current_user.save
-      respond_to do |format|
-        format.html { redirect_to posts_path }
-        format.json { render json: {success: true } }
-      end
-    else
-      current_user.favourite_posts_ids = current_user.favourite_posts_ids - [@post.id]
-      current_user.save
+    
+    if favourited?(@post)
+      @favor = Favourite.where(user_id: current_user.id, post_id: @post.id)
+      @favor.delete
       respond_to do |format|
         format.html { redirect_to posts_path }
         format.json { render json: {success: false } }
+      end
+    else
+      @favor = Favourite.new(user_id: current_user.id, post_id: @post.id)
+      @favor.save
+      respond_to do |format|
+        format.html { redirect_to posts_path }
+        format.json { render json: {success: true } }
       end
     end
   end

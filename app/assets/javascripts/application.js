@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require_tree .
 //= require_self
+//= require bootstrap
 
 $(document).ready(function(){
 	$(".vote-up").live('click', function(){
@@ -21,13 +22,13 @@ $(document).ready(function(){
 			return false;
 		}
 		var url = $(this).attr('href') + ".json";
-		var vote_up_count = $(this).siblings('span.vote-up-count');
-		var vote_links = $(this).parent('.vote').find('.vote-link');
+		var vote_up_links = $(this).parent('.vote').find('vote-up');
+		var vote_links = $(this).parent('.vote').find('a');
 		$.ajax({
 		  url: url,
 		  success: function(response){
 		  	if (response.success) {
-		  		vote_up_count.text(response.vote_up_count);
+		  		vote_up_links.text("VCL(" + response.vote_up_count + ")")
 		  		vote_links.addClass("disable");
 		  	} else {
 		  		alert('false');
@@ -42,16 +43,14 @@ $(document).ready(function(){
 			return false;
 		}
 		var url = $(this).attr('href') + ".json";
-		var vote_down_count = $(this).siblings('span.vote-down-count');
-		var vote_links = $(this).parent('.vote').find('.vote-link');
-		console.log(vote_down_count);
+		var vote_down_links = $(this).parent('.vote').find('.vote-down');
+		var vote_links = $(this).parent('.vote').find('a');
 		$.ajax({
 			url: url,
 			success: function(response){
 				if (response.success){
-					vote_down_count.text(response.vote_down_count);
+					vote_down_links.text("Chem gio(" + response.vote_down_count +")")
 					vote_links.addClass("disable");
-					console.log(response.vote_down_count);
 				} else {
 					alert('false');
 				}
@@ -69,7 +68,7 @@ $(document).ready(function(){
 			url: url,
 			success: function(response){
 				if (response.success){
-					report_count.text(response.reports_count);
+					report_link.text("Report (" + response.reports_count + ")");
 					report_link.addClass("disable");
 				} else {
 					alert('false');

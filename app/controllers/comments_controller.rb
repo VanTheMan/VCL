@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
 	end
 
 	def create
-		@comment = current_user.comments.build(params[:comment])
+		@comment = current_user.comments.create(params[:comment])
 		@comment.post = Post.find(params[:post_id])
 
 		html = render_to_string :partial => "comment", :layout => false, :locals => { comment: @comment }
