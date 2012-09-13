@@ -108,7 +108,7 @@ class PostsController < ApplicationController
   def destroy
   	@post = Post.find(params[:id])
     if @post.user == current_user
-  	  @post.destroy
+      @post.destroy
   	  redirect_to posts_path, notice: "you have deleted your post"
     else
       redirect_to posts_path, notice: "you cannot delete other user's post"

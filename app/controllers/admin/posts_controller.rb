@@ -2,49 +2,33 @@ class Admin::PostsController < ApplicationController
 	before_filter :authenticated_admin
 
 	def index
-	    @posts = Post.all.desc(:created_at)
-	    if params[:order_by] == "updated_at"
-	      @posts = Post.all.desc(:updated_at)
-	    elsif params[:order_by] == "created_at"
-	      @posts = Post.all.desc(:created_at)
-	    elsif params[:order_by] == "comments_num"
-	      @posts = Post.all.sort{|a,b| b.comments.count <=> a.comments.count }
-	    elsif params[:order_by] == "reports_count"
-	      @posts = Post.where(:reports_count => 3)
-	    end
-	  	@post = Post.new
-  	end
-
-  	def new
-	  	@post = Post.new
-	end
-
-	def vote_up
-	    @post = Post.find(params[:id])
-	    if !@post.voteup_ids.include?(current_user.id)
-	      if !@post.votedown_ids.include?(current_user.id)
-	        @post.voteup_ids << current_user.id
-	        @post.save
-	        redirect_to posts_path
+	    case params[:order_by]
+	      when "updated_at" 
+	        @list_posts = Post.valid.all.desc(:updated_at)
+	      when "created_at"
+	        @list_posts = Post.valid.all.desc(:created_at)  
+	      when "comments_num"  
+	        @list_posts = Post.valid.all.sort{|a,b| b.comments.count <=> a.comments.count }
+	      when "random"
+	        @random_num = rand(Post.all.count)
+	        @list_posts = Post.all.sample(@random_num)
+	      when "favourite"
+	        @list_posts = current_user.favourites.map { |f| f.post }
 	      else
-	        redirect_to posts_path, notice: 'you cannot vote up' 
-	      end
-	    end
-	end
+	        @list_posts = Post.valid.all.desc(:created_at)
+    	end
+
+    	if @list_posts.is_a? Array
+      		@posts = Kaminari.paginate_array(@list_posts).page(params[:page]).per(5)
+   		else 
+     	 	@posts = @list_posts.page(params[:page]).per(5)
+    	end
+  		@post = Post.new
+  	end
 
 	def show
 	    @post = Post.find(params[:id])   
 	    @comments = @post.comments
-	end
-
-	def create
-	  	@post = current_user.posts.build(params[:post])
-
-	  	if @post.save
-		    redirect_to posts_path, notice: 'post was successfully created.' 
-		  else
-	      render action: "new" 
-	    end   
 	end
 
 	def edit
