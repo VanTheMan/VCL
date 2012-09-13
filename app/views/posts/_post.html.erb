@@ -1,7 +1,8 @@
 <li>
   <strong><%= post.user.email %></strong>
+
+  <strong class="report">
   <% if user_signed_in? %>
-    <strong class="report">
       <% if !post.reported_ids.include?(current_user.id)%> 
         <%= link_to "Report ("+ post.reports_count.to_s + ")",report_post_path(post.id), class:"report-link" %>
       <% else %>
@@ -16,10 +17,12 @@
     </span>
   <% end %>
   </strong>
+
   <span class="content"><%= post.content %></span>
   <span class="comment">
     <%= link_to 'Comment', post %>(<%= post.comments.count %>)
   </span>
+
   <span class="vote">
     <% if user_signed_in? && voted?(post) %>
       <%= link_to "VCL(" + post.voteup_ids.count.to_s + ")", vote_up_post_path(post.id),class: "vote-up "%>
@@ -29,6 +32,7 @@
       Chem gio(<%= post.votedown_ids.count %>)
     <% end %>
   </span>
+
   <span class="modify">
     <% if current_user=(post.user) %>
       <%= link_to 'Edit', edit_post_path(post.id) %>
@@ -36,6 +40,7 @@
     <% end %>
   </span>
   </br>
+
   <span class="timestamp">
     Posted <%= time_ago_in_words(post.created_at) %> ago.
   </span>

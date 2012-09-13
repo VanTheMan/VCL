@@ -13,12 +13,16 @@ class PostsController < ApplicationController
         @random_num = rand(Post.all.count)
         @list_posts = Post.all.sample(@random_num)
       when "favourite"
-        @list_posts = Post.find(current_user.favourite_posts_ids)
+        @list_posts = current_user.favourites.map { |f| f.post }
       else
         @list_posts = Post.valid.all.desc(:created_at)
     end
 
-    @posts = @list_posts.page(params[:page]).per(5)
+    if @list_posts.is_a? Array
+      @posts = Kaminari.paginate_array(@list_posts).page(params[:page]).per(5)
+    else 
+      @posts = @list_posts.page(params[:page]).per(5)
+    end
   	@post = Post.new
   end
 
@@ -28,7 +32,7 @@ class PostsController < ApplicationController
 
   def vote_up
     @post = Post.find(params[:id])
-    if @post.voteup_ids.include?(current_user.id) || @post.votedown_ids.include?(current_user.id)
+    if !voted?(@post)
       respond_to do |format|
         format.html  {redirect_to posts_path, notice: 'you cannot vote up' }
         format.json  { render json: { success: false } }
@@ -45,7 +49,7 @@ class PostsController < ApplicationController
 
   def vote_down
     @post = Post.find(params[:id])
-    if @post.votedown_ids.include?(current_user.id)  || @post.voteup_ids.include?(current_user.id)
+    if !voted?(@post)
       respond_to do |format|  
         format.html { redirect_to posts_path }
         format.html { render json: { success: false } }
