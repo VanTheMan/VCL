@@ -22,18 +22,18 @@ $(document).ready(function(){
 			return false;
 		}
 		var url = $(this).attr('href') + ".json";
-		var vote_up_links = $(this).parent('.vote').find('vote-up');
+		var vote_up_links = $(this).parent('.vote').find('.vote-up');
 		var vote_links = $(this).parent('.vote').find('a');
 		$.ajax({
-		  url: url,
-		  success: function(response){
-		  	if (response.success) {
-		  		vote_up_links.text("VCL(" + response.vote_up_count + ")")
-		  		vote_links.addClass("disable");
-		  	} else {
-		  		alert('false');
+		  	url: url,
+		  	success: function(response){
+			  	if (response.success) {
+			  		vote_up_links.text("VCL(" + response.vote_up_count + ")");
+			  		vote_links.addClass("disable");
+			  	} else {
+			  		alert('false');
+			  	}
 		  	}
-		  }
 		});
 		return false;
 	});
@@ -49,7 +49,7 @@ $(document).ready(function(){
 			url: url,
 			success: function(response){
 				if (response.success){
-					vote_down_links.text("Chem gio(" + response.vote_down_count +")")
+					vote_down_links.text("Chem gio(" + response.vote_down_count +")");
 					vote_links.addClass("disable");
 				} else {
 					alert('false');

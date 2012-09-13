@@ -13,7 +13,7 @@ module PostsHelper
 	end
 
 	def voted?(post)
-		if post.voteup_ids.include?(current_user.id) && post.votedown_ids.include?(current_user.id)
+		if post.voteup_ids.include?(current_user.id) || post.votedown_ids.include?(current_user.id)
 			true
 		else
 			false

@@ -32,7 +32,7 @@ class PostsController < ApplicationController
 
   def vote_up
     @post = Post.find(params[:id])
-    if !voted?(@post)
+    if voted?(@post)
       respond_to do |format|
         format.html  {redirect_to posts_path, notice: 'you cannot vote up' }
         format.json  { render json: { success: false } }
@@ -49,7 +49,7 @@ class PostsController < ApplicationController
 
   def vote_down
     @post = Post.find(params[:id])
-    if !voted?(@post)
+    if voted?(@post)
       respond_to do |format|  
         format.html { redirect_to posts_path }
         format.html { render json: { success: false } }

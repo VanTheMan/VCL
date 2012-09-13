@@ -24,7 +24,7 @@
   </span>
 
   <span class="vote">
-    <% if user_signed_in? && voted?(post) %>
+    <% if user_signed_in? && !voted?(post) %>
       <%= link_to "VCL(" + post.voteup_ids.count.to_s + ")", vote_up_post_path(post.id),class: "vote-up "%>
       <%= link_to "Chem gio(" + post.votedown_ids.count.to_s + ")", vote_down_post_path(post.id),class: "vote-down "%>
     <% else %>
